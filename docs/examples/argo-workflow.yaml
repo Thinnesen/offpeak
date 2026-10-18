@@ -1,0 +1,83 @@
+# Run a DeferrableJob as a step of an Argo Workflow.
+# The step creates the DeferrableJob and waits until offpeak reports Succeeded or Failed.
+# Needs: the SignalSource "dk1-carbon" and the RBAC below in the workflow namespace.
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: offpeak-workflow
+  namespace: ml
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: offpeak-workflow
+  namespace: ml
+rules:
+  - apiGroups: [offpeak.thinnesen.com]
+    resources: [deferrablejobs]
+    verbs: [create, get, list, watch, patch]
+  # The Argo executor writes the result of each step.
+  - apiGroups: [argoproj.io]
+    resources: [workflowtaskresults]
+    verbs: [create, patch]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: offpeak-workflow
+  namespace: ml
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: offpeak-workflow
+subjects:
+  - kind: ServiceAccount
+    name: offpeak-workflow
+    namespace: ml
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: nightly-training-
+  namespace: ml
+spec:
+  serviceAccountName: offpeak-workflow
+  entrypoint: main
+  templates:
+    - name: main
+      steps:
+        - - name: prepare-data
+            template: prepare
+        - - name: train-when-clean
+            template: train
+    - name: prepare
+      container:
+        image: busybox:1.38.0
+        command: ["sh", "-c", "echo preparing data"]
+    - name: train
+      resource:
+        action: create
+        # Deleting the workflow also deletes the DeferrableJob and its Job.
+        setOwnerReference: true
+        successCondition: status.phase == Succeeded
+        failureCondition: status.phase == Failed
+        manifest: |
+          apiVersion: offpeak.thinnesen.com/v1alpha1
+          kind: DeferrableJob
+          metadata:
+            generateName: train-
+          spec:
+            deadline: "2026-10-20T06:00:00Z"   # set by your pipeline, for example with a workflow parameter
+            estimatedDuration: 2h
+            signals:
+              - sourceRef: dk1-carbon
+                weight: 100
+            jobTemplate:
+              spec:
+                backoffLimit: 1
+                template:
+                  spec:
+                    restartPolicy: Never
+                    containers:
+                      - name: train
+                        image: registry.example.com/team/train:1.0.0

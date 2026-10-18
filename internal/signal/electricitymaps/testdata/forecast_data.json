@@ -1,0 +1,38 @@
+{
+  "zone": "SE-SE3",
+  "data": [
+    {
+      "carbonIntensity": 41,
+      "datetime": "2026-10-17T14:00:00.000Z",
+      "isEstimated": false
+    },
+    {
+      "carbonIntensity": 38,
+      "datetime": "2026-10-17T15:00:00.000Z",
+      "isEstimated": false
+    },
+    {
+      "carbonIntensity": 35,
+      "datetime": "2026-10-17T16:00:00.000Z",
+      "isEstimated": false
+    },
+    {
+      "carbonIntensity": 33,
+      "datetime": "2026-10-17T17:00:00.000Z",
+      "isEstimated": false
+    },
+    {
+      "carbonIntensity": 30,
+      "datetime": "2026-10-17T18:00:00.000Z",
+      "isEstimated": false
+    },
+    {
+      "carbonIntensity": 28,
+      "datetime": "2026-10-17T19:00:00.000Z",
+      "isEstimated": false
+    }
+  ],
+  "temporalGranularity": "hourly",
+  "unit": "gCO2eq/kWh",
+  "updatedAt": "2026-10-17T13:55:12.418Z"
+}

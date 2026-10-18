@@ -1,0 +1,32 @@
+# On AWS: run a GPU training Job before the deadline, on the Karpenter NodePool "gpu",
+# when the carbon intensity and the spot price are lowest.
+apiVersion: offpeak.thinnesen.com/v1alpha1
+kind: DeferrableJob
+metadata:
+  labels:
+    app.kubernetes.io/name: offpeak
+    app.kubernetes.io/managed-by: kustomize
+  name: train-model
+spec:
+  deadline: "2026-10-19T18:00:00Z"
+  estimatedDuration: 2h
+  signals:
+    - sourceRef: se3-carbon
+      weight: 70
+    - sourceRef: eu-north-1-spot
+      weight: 30
+  karpenter:
+    nodePool: gpu
+    instanceTypes: [g6.xlarge, g6.2xlarge]
+  jobTemplate:
+    spec:
+      backoffLimit: 1
+      template:
+        spec:
+          restartPolicy: Never
+          containers:
+            - name: train
+              image: registry.example.com/team/train:1.0.0
+              resources:
+                limits:
+                  nvidia.com/gpu: "1"

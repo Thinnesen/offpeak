@@ -1,0 +1,21 @@
+apiVersion: v2
+name: offpeak
+description: Run Kubernetes batch Jobs when the power is cleanest and the capacity is cheapest, before a deadline.
+type: application
+
+version: 0.1.0
+appVersion: "0.1.0"
+
+home: https://github.com/Thinnesen/offpeak
+sources:
+  - https://github.com/Thinnesen/offpeak
+keywords:
+  - kubernetes
+  - operator
+  - batch
+  - carbon-aware
+  - karpenter
+  - spot
+
+annotations:
+  kubebuilder.io/generated-by: kubebuilder

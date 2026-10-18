@@ -1,0 +1,27 @@
+# Run a batch Job before the deadline, when the DK1 grid has the lowest carbon intensity
+# and the lowest day-ahead price. Change the deadline to a time in the future.
+apiVersion: offpeak.thinnesen.com/v1alpha1
+kind: DeferrableJob
+metadata:
+  labels:
+    app.kubernetes.io/name: offpeak
+    app.kubernetes.io/managed-by: kustomize
+  name: nightly-report
+spec:
+  deadline: "2026-10-19T06:00:00Z"
+  estimatedDuration: 30m
+  signals:
+    - sourceRef: dk1-carbon
+      weight: 70
+    - sourceRef: dk1-price
+      weight: 30
+  jobTemplate:
+    spec:
+      backoffLimit: 2
+      template:
+        spec:
+          restartPolicy: Never
+          containers:
+            - name: report
+              image: busybox:1.37
+              command: ["sh", "-c", "echo building the report; sleep 10"]

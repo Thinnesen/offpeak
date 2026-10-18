@@ -1,0 +1,6 @@
+## Append samples of your project ##
+resources:
+- offpeak_v1alpha1_deferrablejob.yaml
+- offpeak_v1alpha1_deferrablejob_karpenter.yaml
+- offpeak_v1alpha1_signalsource.yaml
+# +kubebuilder:scaffold:manifestskustomizesamples

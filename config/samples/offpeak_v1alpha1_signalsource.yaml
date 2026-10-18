@@ -1,0 +1,103 @@
+# Energi Data Service needs no key. Use it to try offpeak.
+apiVersion: offpeak.thinnesen.com/v1alpha1
+kind: SignalSource
+metadata:
+  labels:
+    app.kubernetes.io/name: offpeak
+    app.kubernetes.io/managed-by: kustomize
+  name: dk1-carbon
+spec:
+  energiDataService:
+    area: DK1
+    series: CO2Prognosis
+---
+apiVersion: offpeak.thinnesen.com/v1alpha1
+kind: SignalSource
+metadata:
+  labels:
+    app.kubernetes.io/name: offpeak
+    app.kubernetes.io/managed-by: kustomize
+  name: dk1-price
+spec:
+  energiDataService:
+    area: DK1
+    series: DayAheadPrice
+---
+# ENTSO-E needs an API token in the Secret "entsoe" in the controller namespace.
+apiVersion: offpeak.thinnesen.com/v1alpha1
+kind: SignalSource
+metadata:
+  labels:
+    app.kubernetes.io/name: offpeak
+    app.kubernetes.io/managed-by: kustomize
+  name: de-price
+spec:
+  entsoe:
+    biddingZone: 10Y1001A1001A82H
+    tokenSecretRef:
+      name: entsoe
+      key: token
+---
+# AWS spot prices use the default AWS credential chain (EKS Pod Identity or IRSA).
+apiVersion: offpeak.thinnesen.com/v1alpha1
+kind: SignalSource
+metadata:
+  labels:
+    app.kubernetes.io/name: offpeak
+    app.kubernetes.io/managed-by: kustomize
+  name: eu-north-1-spot
+spec:
+  awsSpot:
+    region: eu-north-1
+---
+# Electricity Maps needs an API key in the Secret "electricitymaps" in the controller namespace.
+apiVersion: offpeak.thinnesen.com/v1alpha1
+kind: SignalSource
+metadata:
+  labels:
+    app.kubernetes.io/name: offpeak
+    app.kubernetes.io/managed-by: kustomize
+  name: se3-carbon
+spec:
+  electricityMaps:
+    zone: SE-SE3
+    tokenSecretRef:
+      name: electricitymaps
+      key: token
+---
+# A global, free proxy: the solar and wind forecast of Open-Meteo near the cloud region.
+# It is not a measured carbon intensity. Lower values mean more sun and wind.
+apiVersion: offpeak.thinnesen.com/v1alpha1
+kind: SignalSource
+metadata:
+  labels:
+    app.kubernetes.io/name: offpeak
+    app.kubernetes.io/managed-by: kustomize
+  name: eu-north-1-weather
+spec:
+  weatherProxy:
+    cloudRegion: aws:eu-north-1
+---
+# Great Britain needs no key: the National Grid ESO Carbon Intensity API. Region 13 is London.
+apiVersion: offpeak.thinnesen.com/v1alpha1
+kind: SignalSource
+metadata:
+  labels:
+    app.kubernetes.io/name: offpeak
+    app.kubernetes.io/managed-by: kustomize
+  name: london-carbon
+spec:
+  ukCarbonIntensity:
+    regionID: 13
+---
+# Europe without a key: the renewable share forecast of Energy-Charts (Fraunhofer ISE).
+apiVersion: offpeak.thinnesen.com/v1alpha1
+kind: SignalSource
+metadata:
+  labels:
+    app.kubernetes.io/name: offpeak
+    app.kubernetes.io/managed-by: kustomize
+  name: de-renewables
+spec:
+  energyCharts:
+    country: de

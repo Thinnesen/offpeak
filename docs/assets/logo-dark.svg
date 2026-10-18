@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="96" viewBox="0 0 360 96" role="img" aria-label="offpeak">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#a78bfa"/>
+      <stop offset="1" stop-color="#34d399"/>
+    </linearGradient>
+    <mask id="crescent">
+      <rect width="96" height="96" fill="#fff"/>
+      <circle cx="62" cy="36" r="30" fill="#000"/>
+    </mask>
+  </defs>
+  <!-- A crescent moon for the quiet hours of the grid, and a small star. -->
+  <circle cx="44" cy="50" r="36" fill="url(#g)" mask="url(#crescent)"/>
+  <path d="M74 18 l3 8 l8 3 l-8 3 l-3 8 l-3 -8 l-8 -3 l8 -3 z" fill="#34d399"/>
+  <text x="100" y="66" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif"
+        font-size="54" font-weight="800" letter-spacing="-1.5" fill="#ede9fe">offpeak</text>
+</svg>

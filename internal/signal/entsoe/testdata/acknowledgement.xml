@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Acknowledgement_MarketDocument xmlns="urn:iec62325.351:tc57wg16:451-1:acknowledgementdocument:7:0">
+	<mRID>4b6f0a2c-3d1e-4f5a-9b8c-7d6e5f4a3b2c</mRID>
+	<createdDateTime>2026-10-17T13:40:12Z</createdDateTime>
+	<sender_MarketParticipant.mRID codingScheme="A01">10X1001A1001A450</sender_MarketParticipant.mRID>
+	<sender_MarketParticipant.marketRole.type>A32</sender_MarketParticipant.marketRole.type>
+	<receiver_MarketParticipant.mRID codingScheme="A01">10X1001A1001A39I</receiver_MarketParticipant.mRID>
+	<receiver_MarketParticipant.marketRole.type>A39</receiver_MarketParticipant.marketRole.type>
+	<received_MarketDocument.createdDateTime>2026-10-17T13:40:12Z</received_MarketDocument.createdDateTime>
+	<Reason>
+		<code>999</code>
+		<text>No matching data found for Data item Day-ahead Prices [12.1.D] (10Y1001A1001A82H, 10Y1001A1001A82H) and interval 2026-10-20T00:00:00.000Z/2026-10-21T00:00:00.000Z.</text>
+	</Reason>
+</Acknowledgement_MarketDocument>

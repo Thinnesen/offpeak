@@ -1,0 +1,42 @@
+name: Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions: {}
+
+jobs:
+  test:
+    permissions:
+      contents: read
+    name: Unit and envtest tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone the code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Setup Go
+        uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version-file: go.mod
+
+      - name: Check that go.mod and go.sum are tidy
+        run: go mod tidy -diff
+
+      - name: Run tests
+        run: make test
+
+      - name: Check that generated files are up to date
+        run: git diff --exit-code
+
+      - name: Check coverage of internal packages
+        run: |
+          go tool cover -func=cover.out | tail -1
+          grep -E '^mode:|/internal/' cover.out > cover-internal.out
+          total=$(go tool cover -func=cover-internal.out | awk '/^total:/ {print int($3)}')
+          echo "internal coverage: ${total}%"
+          test "$total" -ge 80

@@ -1,0 +1,61 @@
+apiVersion: rbac.authorization.k8s.io/v1
+{{- if .Values.rbac.namespaced }}
+kind: Role
+{{- else }}
+kind: ClusterRole
+{{- end }}
+metadata:
+{{- if .Values.rbac.namespaced }}
+  namespace: {{ .Release.Namespace }}
+{{- end }}
+  name: {{ include "offpeak.resourceName" (dict "suffix" "manager-role" "context" $) }}
+rules:
+- apiGroups:
+  - batch
+  resources:
+  - jobs
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - watch
+- apiGroups:
+  - events.k8s.io
+  resources:
+  - events
+  verbs:
+  - create
+  - patch
+- apiGroups:
+  - karpenter.sh
+  resources:
+  - nodepools
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - offpeak.thinnesen.com
+  resources:
+  - deferrablejobs
+  - signalsources
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - offpeak.thinnesen.com
+  resources:
+  - deferrablejobs/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - offpeak.thinnesen.com
+  resources:
+  - deferrablejobs/status
+  - signalsources/status
+  verbs:
+  - get
+  - patch
+  - update
